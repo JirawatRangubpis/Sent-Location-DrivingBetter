@@ -7,12 +7,17 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +38,33 @@ public class MainActivity extends AppCompatActivity {
         //Setup Location
         setupLocation();
 
+        // Auto Update Location to mySQL
+        updateLocationToMySQL();
+
     }   // Main Method
+
+    private void updateLocationToMySQL() {
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy HH:mm:ss");
+        Date date = new Date();
+        String strCurrentDate = dateFormat.format(date);
+        Log.d("26Feb", "CurrentDate ==>" + strCurrentDate);
+
+        myLoop();
+
+    } // updateLocationToMySQL
+
+    private void myLoop() {
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               updateLocationToMySQL();
+            }
+        }, 5000);
+
+    } // myLoop
 
     @Override
     protected void onResume() {
